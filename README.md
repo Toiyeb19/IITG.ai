@@ -22,7 +22,7 @@ Exploratory Data Analysis (EDA)
 
 <img width="985" height="328" alt="image" src="https://github.com/user-attachments/assets/4d8a8fca-cff3-46c5-b747-e041a1112a6b" />
 
-    Description: This plot demonstrates the inherent daily peaks in grid consumption and the variance across different seasons.
+    Description: This plot demonstrates the overall trend in the electricity demand over the years .
 
 2. Weather Correlation Heatmap
 
