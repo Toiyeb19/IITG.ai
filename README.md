@@ -1,11 +1,10 @@
 # IITG.ai
 
 Predictive Paradox: Grid Demand Forecasting
-Overview
+Text Summary Report
+This project predicts the next hour's electricity demand (demand_mw at t+1) on the grid using only information available at time t.
 
-Accurate electricity demand forecasting is critical for power grid stability. This project tackles the Predictive Paradox Task for IITG.ai: forecasting the next hour's electricity demand (demand_mw at t+1) on the national grid using only information available at time t.
-
-In strict adherence to the project constraints, this pipeline relies exclusively on classical machine learning architectures (XGBoost) and entirely avoids autoregressive models (ARIMA) or deep learning (LSTMs).
+In strict adherence to the project constraints,a simple classical model (XGBoost) is applied.
 Dataset Description
 
 The model integrates three distinct data sources, aligning multiple frequencies into a unified hourly structure:
@@ -40,7 +39,7 @@ Exploratory Data Analysis (EDA)
 Methodology & Pipeline
 1. Anomaly Handling & Data Cleaning
 
-    Spike Detection: Handled severe, undocumented spikes in raw demand using a mathematically sound 3-sigma rolling bound strategy.
+    Spike Detection: Handled severe, undocumented spikes in raw demand using a mathematically sound 3-sigma rolling bound strategy.Any data that was more than 3 standard deviations away from the mean was removed
 
     Missing Data: Imputed missing values safely, strictly dropping initial NaN rows caused by lag generation rather than backfilling (bfill), which would have introduced lookahead bias.
 
