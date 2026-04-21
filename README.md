@@ -18,7 +18,7 @@ The model integrates three distinct data sources, aligning multiple frequencies 
 Exploratory Data Analysis (EDA)
 
 (Visualizing the relationships between weather, time of day, and human consumption patterns.)
-1. Demand Volatility and Daily Seasonality
+1. Demand Trend Over the Years
 
 <img width="985" height="328" alt="image" src="https://github.com/user-attachments/assets/4d8a8fca-cff3-46c5-b747-e041a1112a6b" />
 
