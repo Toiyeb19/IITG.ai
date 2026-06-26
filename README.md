@@ -15,7 +15,7 @@ The model integrates three distinct data sources, aligning multiple frequencies 
 
 ---
 
-## 🔍 Exploratory Data Analysis (EDA)
+## Exploratory Data Analysis (EDA)
 Visualizing the underlying relationships between environment, macro-trends, and human consumption patterns.
 
 ### 1. Demand Trend Over the Years
@@ -35,7 +35,7 @@ Visualizing the underlying relationships between environment, macro-trends, and 
 
 ---
 
-## 🛠️ Methodology & Pipeline
+## Methodology & Pipeline
 
 ### 1. Anomaly Handling & Data Cleaning
 * **Spike Mitigation:** Severe, undocumented recording spikes and extreme outliers in the raw demand series were detected and smoothed using a robust rolling 3-sigma bound strategy ($\mu \pm 3\sigma$). 
@@ -55,7 +55,7 @@ The tabular dataset was chronologically ordered before defining the modeling tar
 
 ---
 
-## 🧠 Addressing the Predictive Paradox: Leakage & Autocorrelation
+## Leakage & Autocorrelation
 
 ### The Data Leakage Discovery
 During initial pipeline development, the model achieved an ultra-low, highly optimistic validation score of **~2.58% MAPE**. However, evaluating the model's Feature Importance (Information Gain) revealed that the tree-based architecture was heavily exploiting concurrent target proxies:
@@ -64,10 +64,10 @@ During initial pipeline development, the model achieved an ultra-low, highly opt
 * **Proxy Leak (`generation_mw`):** Because power grids maintain a near 1:1 instantaneous equilibrium between supply and consumption to maintain system stability, generation metrics served as a perfect mirror proxy for target demand.
 * **Autocorrelation Trap (`demand_lag_1h`):** The model hyper-focused on time series inertia, effectively turning a powerful gradient-boosted tree regressor into a basic persistence "copy-paste" machine.
 
-> ⚠️ **Why High Autocorrelation & Target Proxies Are Dangerous:**
+>  **Why High Autocorrelation & Target Proxies Are Dangerous:**
 > When a model over-relies on instant lags ($t-1$) and concurrent indicators, it masks its inability to map the structural physics of the system. If a sudden grid blackout, severe weather shift, or load-shedding anomaly occurs, the model breaks down instantly in production because it never learned the underlying causal drivers (like climate dynamics or diurnal human behavior).
 
-### Architectural Remediation (The Fix)
+### The Fix
 To force the model to unravel the true *Predictive Paradox* and learn systemic structural relationships rather than simple trend extrapolation, the pipeline was aggressively hardened:
 1. **Purged Concurrent Proxies:** `demand_mw`, `generation_mw`, and operational variables were completely removed from the feature matrix ($X$).
 2. **Eliminated Brittle Lags:** Dropped `demand_lag_1h` and `demand_lag_2h` to decouple the pipeline from short-term time series inertia.
@@ -75,7 +75,7 @@ To force the model to unravel the true *Predictive Paradox* and learn systemic s
 
 ---
 
-## 📈 Modeling, Results & Interpretation
+## Modeling, Results & Interpretation
 
 ### Algorithm: XGBoost Regressor
 XGBoost was chosen for its exceptional ability to capture non-linear, multi-variable thresholds (e.g., how both extreme cold and extreme heat cause distinct power spikes via HVAC systems) and its capacity to maximize structural splits using Information Gain.
@@ -101,5 +101,5 @@ The final models were rigorously benchmarked on the chronological 2024 hold-out 
 * **Primary Drivers:** Realignment toward historical seasonal milestones—**`demand_lag_24h` (0.5787)** and lookback-safe short-term trends **`roll_mean_3h` (0.2000)**. Information gain is naturally distributed down to legitimate physical drivers such as `sunshine_duration`, diurnal continuous `hour` tracking, and weather properties.
 * **Validation Performance:** **4.18% MAPE** (Genuine, leak-free generalization score).
 
-> 💡 **Why a Higher MAPE (4.18%) is better:**
+>  **Why a Higher MAPE (4.18%) is better:**
 > While a 4.18% error rate is statistically higher than 2.58%, it represents a mathematically honest, deployable forecasting system. The original model was a brittle illusion that would collapse under grid stress or load-shedding events. The updated configuration safely maps independent, real-world exogenous variables, delivering authentic forward-predictive capacity for actual grid operations.
